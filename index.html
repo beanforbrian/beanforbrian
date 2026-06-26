@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bean for Brian — Brian Wilson's Kidney Transplant Journey</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#1A2744;--gold:#C9973A;--cream:#FAF7F2;--warm:#F0EAE0;--text:#2C2C2C;--white:#FFFFFF;}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--navy);color:var(--white);}
+.lang-bar{position:fixed;top:0;right:0;z-index:999;padding:0.5rem 1rem;display:flex;gap:0.5rem;}
+.lang-btn{background:rgba(255,255,255,0.1);border:1px solid rgba(201,151,58,0.4);color:var(--white);padding:0.3rem 0.8rem;border-radius:4px;cursor:pointer;font-size:0.78rem;font-family:'Inter',sans-serif;}
+.lang-btn.active{background:var(--gold);color:var(--navy);font-weight:700;}
+[data-lang]{display:none;}
+[data-lang].visible{display:block;}
+span[data-lang].visible{display:inline;}
+#landing{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2rem 1.25rem;background:var(--navy);}
+.card{background:rgba(255,255,255,0.04);border:1px solid rgba(201,151,58,0.25);border-radius:12px;padding:3rem 2.5rem;max-width:560px;width:100%;text-align:center;}
+.photo-row{display:flex;justify-content:center;gap:1rem;margin-bottom:1.75rem;}
+.photo-circle{width:85px;height:85px;border-radius:50%;border:3px solid var(--gold);object-fit:cover;object-position:top;}
+.badge{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(201,151,58,0.12);border:1px solid rgba(201,151,58,0.3);border-radius:20px;padding:0.4rem 0.9rem;font-size:0.75rem;color:var(--gold);margin-bottom:1.25rem;}
+.eyebrow{font-size:0.72rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:0.85rem;}
+.card h1{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.3rem);line-height:1.25;color:var(--white);margin-bottom:1rem;}
+.card h1 em{font-style:italic;color:var(--gold);}
+.subtext{font-size:0.97rem;color:rgba(255,255,255,0.75);line-height:1.7;margin-bottom:0.75rem;}
+.subtext strong{color:var(--white);}
+.quote-block{font-family:'Playfair Display',serif;font-style:italic;font-size:0.9rem;color:rgba(255,255,255,0.6);border-left:3px solid var(--gold);padding-left:1rem;margin:1.5rem 0;text-align:left;}
+.form-label{font-size:0.78rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;display:block;}
+.form-group{display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1rem;}
+input{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:0.85rem 1rem;color:var(--white);font-size:0.95rem;font-family:'Inter',sans-serif;width:100%;outline:none;}
+input::placeholder{color:rgba(255,255,255,0.4);}
+input:focus{border-color:var(--gold);}
+.btn-gold{background:var(--gold);color:var(--navy);border:none;border-radius:6px;padding:1rem;font-size:1rem;font-weight:700;font-family:'Inter',sans-serif;cursor:pointer;width:100%;}
+.btn-gold:disabled{background:#999;cursor:not-allowed;}
+.privacy{font-size:0.73rem;color:rgba(255,255,255,0.3);margin-top:0.75rem;}
+.skip{margin-top:1.25rem;font-size:0.82rem;color:rgba(255,255,255,0.4);}
+.skip a{color:rgba(255,255,255,0.55);text-decoration:underline;cursor:pointer;}
+.error-msg{color:#ff6b6b;font-size:0.82rem;margin-top:0.5rem;display:none;}
+.success-box{display:none;background:rgba(201,151,58,0.15);border:1px solid var(--gold);border-radius:8px;padding:1.5rem;margin-top:1rem;text-align:center;}
+.success-box h3{font-family:'Playfair Display',serif;color:var(--gold);margin-bottom:0.5rem;}
+.success-box p{font-size:0.92rem;color:rgba(255,255,255,0.8);line-height:1.6;}
+#story{display:none;}
+.nav{background:var(--navy);padding:1.1rem 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(201,151,58,0.2);position:sticky;top:0;z-index:100;}
+.nav-brand{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.2rem;font-weight:700;}
+.nav-links{display:flex;gap:1.5rem;}
+.nav-links a{color:rgba(255,255,255,0.7);text-decoration:none;font-size:0.85rem;}
+.nav-donate{background:var(--gold);color:var(--navy);padding:0.5rem 1.25rem;border-radius:4px;font-weight:700;font-size:0.85rem;text-decoration:none;}
+.hero{background:var(--navy);padding:5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(201,151,58,0.12) 0%,transparent 60%);}
+.hero-eyebrow{font-size:0.72rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.25rem;position:relative;}
+.hero h2{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.2rem);line-height:1.2;color:var(--white);max-width:760px;margin:0 auto 1.25rem;position:relative;}
+.hero h2 em{font-style:italic;color:var(--gold);}
+.hero-sub{font-size:1.05rem;color:rgba(255,255,255,0.72);max-width:580px;margin:0 auto 2.5rem;line-height:1.7;position:relative;}
+.hero-buttons{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;position:relative;}
+.btn-hero-primary{background:var(--gold);color:var(--navy);padding:0.9rem 2rem;border-radius:6px;font-weight:700;font-size:1rem;text-decoration:none;}
+.btn-hero-outline{background:transparent;border:2px solid rgba(255,255,255,0.35);color:var(--white);padding:0.9rem 2rem;border-radius:6px;font-weight:600;font-size:1rem;text-decoration:none;}
+.photo-strip{display:flex;overflow-x:auto;gap:0.75rem;padding:1.5rem 2rem;background:#0f1829;scrollbar-width:none;}
+.photo-strip::-webkit-scrollbar{display:none;}
+.strip-photo{width:160px;height:160px;flex-shrink:0;border-radius:8px;object-fit:cover;border:2px solid rgba(201,151,58,0.25);}
+section{padding:5rem 2rem;}
+.section-inner{max-width:860px;margin:0 auto;}
+.section-eyebrow{font-size:0.72rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(1.7rem,4vw,2.4rem);line-height:1.25;margin-bottom:1.5rem;}
+.section-body{font-size:1rem;line-height:1.8;color:rgba(255,255,255,0.82);}
+.section-body p{margin-bottom:1.1rem;}
+.selma-section{background:#0f1829;}
+.selma-photos{display:flex;gap:1.25rem;margin:2rem 0;flex-wrap:wrap;justify-content:center;}
+.selma-photo{width:220px;height:260px;object-fit:cover;border-radius:8px;border:3px solid var(--gold);}
+.selma-quote{font-family:'Playfair Display',serif;font-style:italic;font-size:1rem;color:var(--gold);border-left:3px solid var(--gold);padding:1rem 1.5rem;margin:2rem 0;background:rgba(201,151,58,0.07);border-radius:0 8px 8px 0;}
+.timeline-section{background:var(--cream);color:var(--text);}
+.timeline-section .section-title{color:var(--navy);}
+.timeline{margin-top:2rem;}
+.timeline-item{display:flex;gap:1.5rem;margin-bottom:2.5rem;align-items:flex-start;}
+.timeline-dot{width:14px;height:14px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:6px;}
+.timeline-year{font-weight:700;color:var(--gold);font-size:0.85rem;margin-bottom:0.25rem;}
+.timeline-text{font-size:0.97rem;line-height:1.7;color:var(--text);}
+.timeline-text strong{color:var(--navy);}
+.newspaper-section{background:var(--warm);}
+.newspaper-section .section-title{color:var(--navy);}
+.newspaper-img{width:100%;max-width:540px;border-radius:8px;margin:1.5rem auto;display:block;box-shadow:0 8px 30px rgba(0,0,0,0.15);}
+.newspaper-caption{text-align:center;font-size:0.85rem;color:#666;font-style:italic;margin-top:0.5rem;}
+.needs-section{background:var(--white);}
+.needs-section .section-title{color:var(--text);}
+.needs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-top:2rem;}
+.need-card{background:var(--cream);border-radius:8px;padding:1.5rem;border-top:3px solid var(--gold);}
+.need-icon{font-size:2rem;margin-bottom:0.75rem;}
+.need-title{font-weight:700;color:var(--navy);margin-bottom:0.5rem;}
+.need-desc{font-size:0.88rem;color:#555;line-height:1.6;}
+.donate-section{background:var(--navy);text-align:center;}
+.donate-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.2rem);margin-bottom:1rem;}
+.donate-sub{color:rgba(255,255,255,0.72);font-size:1rem;line-height:1.7;max-width:560px;margin:0 auto 2.5rem;}
+.donate-cards{display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:2.5rem;}
+.donate-card{background:rgba(255,255,255,0.05);border:1px solid rgba(201,151,58,0.3);border-radius:10px;padding:2rem 1.5rem;width:220px;text-align:center;}
+.donate-card-icon{font-size:2.2rem;margin-bottom:0.75rem;}
+.donate-card-label{font-size:0.75rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem;}
+.donate-card-value{font-size:1rem;color:var(--white);font-weight:600;word-break:break-all;}
+.btn-gofundme{background:var(--gold);color:var(--navy);padding:1rem 2.5rem;border-radius:6px;font-weight:700;font-size:1.05rem;text-decoration:none;display:inline-block;margin-bottom:2rem;}
+.donor-section{background:linear-gradient(135deg,#0f1829 0%,var(--navy) 100%);text-align:center;}
+.btn-donor{background:transparent;border:2px solid var(--gold);color:var(--gold);padding:1rem 2.5rem;border-radius:6px;font-weight:700;font-size:1rem;text-decoration:none;display:inline-block;}
+.share-section{background:var(--warm);text-align:center;}
+.share-section .section-title{color:var(--navy);}
+.share-buttons{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;}
+.btn-share{padding:0.85rem 1.75rem;border-radius:6px;font-weight:600;font-size:0.92rem;text-decoration:none;}
+.btn-fb{background:#1877F2;color:#fff;}
+.btn-wa{background:#25D366;color:#fff;}
+.btn-email{background:var(--navy);color:#fff;}
+.footer{background:#0a1020;padding:2.5rem 2rem;text-align:center;border-top:1px solid rgba(201,151,58,0.15);}
+.footer-brand{font-family:'Playfair Display',serif;color:var(--gold);font-size:1.1rem;margin-bottom:0.5rem;}
+.footer-text{font-size:0.82rem;color:rgba(255,255,255,0.3);line-height:1.8;}
+.footer-text a{color:rgba(255,255,255,0.4);text-decoration:none;}
+.caption{text-align:center;font-size:0.8rem;color:rgba(255,255,255,0.45);font-style:italic;margin-top:0.5rem;}
+.caption-dark{text-align:center;font-size:0.8rem;color:#888;font-style:italic;margin-top:0.5rem;}
+@media(max-width:600px){.card{padding:2rem 1.25rem;}.nav-links{display:none;}section{padding:3.5rem 1.25rem;}.hero{padding:3.5rem 1.25rem 3rem;}.selma-photo{width:160px;height:200px;}.donate-card{width:100%;}}
+</style>
+</head>
+<body>
+
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('en',event)">🇺🇸 EN</button>
+  <button class="lang-btn" onclick="setLang('pt',event)">🇧🇷 PT</button>
+</div>
+
+<div id="landing">
+<div class="card">
+  <div class="photo-row">
+    <img src="images/formal.jpg" class="photo-circle" alt="Brian Wilson">
+    <img src="images/selma_old.jpg" class="photo-circle" alt="Brian e Mamãe Selma">
+  </div>
+  <div class="badge">📰 <span data-lang="en" class="visible">As featured in The Clarion-Ledger, 1997</span><span data-lang="pt">Publicado no The Clarion-Ledger, 1997</span></div>
+  <p class="eyebrow"><span data-lang="en" class="visible">A Story Nearly 29 Years in the Making</span><span data-lang="pt">Uma história de quase 29 anos</span></p>
+  <h1><span data-lang="en" class="visible">He gave his father <em>the gift of life.</em><br>Now he needs yours.</span><span data-lang="pt">Ele deu ao pai <em>o dom da vida.</em><br>Agora ele precisa do seu.</span></h1>
+  <p class="subtext"><span data-lang="en" class="visible">In 1997, <strong>Brian Wilson</strong> donated one of his kidneys to save his father's life. Today, Brian needs a kidney transplant himself — and he is humbly asking for your help.</span><span data-lang="pt">Em 1997, <strong>Brian Wilson</strong> doou um de seus rins para salvar a vida de seu pai. Hoje, Brian precisa de um transplante de rim — e pede humildemente a sua ajuda.</span></p>
+  <div class="quote-block">
+    <span data-lang="en" class="visible">"Being a living donor has inspired me to definitely become a donor after I pass. I am able to see the benefits of it while I'm alive."</span>
+    <span data-lang="pt">"Ser um doador vivo me inspirou a definitivamente me tornar um doador após minha morte. Posso ver os benefícios disso enquanto ainda estou vivo."</span>
+    <br><br><span style="font-style:normal;font-size:0.8rem;color:rgba(255,255,255,0.4);">— Brian Wilson, 1997 · The Clarion-Ledger</span>
+  </div>
+  <div id="formSection">
+    <span class="form-label"><span data-lang="en" class="visible">Enter your info to read Brian's full story</span><span data-lang="pt">Digite seus dados para ler a história completa de Brian</span></span>
+    <form id="contactForm">
+      <div class="form-group">
+        <input type="text" name="First Name" placeholder="Your First Name * / Seu Primeiro Nome *" required>
+        <input type="text" name="Last Name" placeholder="Your Last Name / Seu Sobrenome">
+        <input type="email" name="Email" placeholder="Your Email * / Seu E-mail *" required>
+        <input type="tel" name="Phone Number" placeholder="Phone / Telefone (optional)">
+      </div>
+      <button type="submit" class="btn-gold" id="submitBtn"><span data-lang="en" class="visible">💛 Read Brian's Story & Learn How to Help</span><span data-lang="pt">💛 Leia a história de Brian e saiba como ajudar</span></button>
+      <p class="error-msg" id="errorMsg"><span data-lang="en" class="visible">Something went wrong. Please try again.</span><span data-lang="pt">Algo deu errado. Tente novamente.</span></p>
+      <p class="privacy"><span data-lang="en" class="visible">🔒 Your information is private and will never be shared or sold.</span><span data-lang="pt">🔒 Suas informações são privadas e nunca serão compartilhadas.</span></p>
+    </form>
+    <p class="skip"><span data-lang="en" class="visible">Prefer to skip? <a onclick="revealStory()">Go directly to the site →</a></span><span data-lang="pt">Prefere pular? <a onclick="revealStory()">Ir diretamente ao site →</a></span></p>
+  </div>
+  <div class="success-box" id="successMsg">
+    <h3><span data-lang="en" class="visible">Thank you so much! 🙏</span><span data-lang="pt">Muito obrigado! 🙏</span></h3>
+    <p><span data-lang="en" class="visible">Your support means more than words can express. Scroll down to read Brian's full story.</span><span data-lang="pt">Seu apoio significa mais do que palavras podem expressar. Role para baixo para ler a história completa de Brian.</span></p>
+  </div>
+</div>
+</div>
+
+<div id="story">
+<nav class="nav">
+  <div class="nav-brand">💛 Bean for Brian</div>
+  <div class="nav-links">
+    <a href="#about"><span data-lang="en" class="visible">Story</span><span data-lang="pt">História</span></a>
+    <a href="#selma">Mama Selma</a>
+    <a href="#donate"><span data-lang="en" class="visible">Donate</span><span data-lang="pt">Doação</span></a>
+    <a href="#donor"><span data-lang="en" class="visible">Be a Donor</span><span data-lang="pt">Seja Doador</span></a>
+  </div>
+  <a href="https://www.gofundme.com/f/support-brians-journey-to-a-kidney-transplant" target="_blank" class="nav-donate"><span data-lang="en" class="visible">Donate Now</span><span data-lang="pt">Doe Agora</span></a>
+</nav>
+
+<section class="hero">
+  <p class="hero-eyebrow"><span data-lang="en" class="visible">A Story Nearly 29 Years in the Making</span><span data-lang="pt">Uma história de quase 29 anos</span></p>
+  <h2><span data-lang="en" class="visible">He gave his father <em>the gift of life.</em><br>Now he needs yours.</span><span data-lang="pt">Ele deu ao pai <em>o dom da vida.</em><br>Agora ele precisa do seu.</span></h2>
+  <p class="hero-sub"><span data-lang="en" class="visible">In 1997, Brian Wilson donated one of his kidneys to save his father Herman's life. Today, Brian's remaining kidney is failing — and he needs a transplant to survive.</span><span data-lang="pt">Em 1997, Brian Wilson doou um de seus rins para salvar a vida de seu pai Herman. Hoje, o rim restante de Brian está falhando — e ele precisa de um transplante para sobreviver.</span></p>
+  <div class="hero-buttons">
+    <a href="https://www.gofundme.com/f/support-brians-journey-to-a-kidney-transplant" target="_blank" class="btn-hero-primary">💛 <span data-lang="en" class="visible">Donate on GoFundMe</span><span data-lang="pt">Doe no GoFundMe</span></a>
+    <a href="https://piedmont.donorscreen.org" target="_blank" class="btn-hero-outline">🫀 <span data-lang="en" class="visible">Explore Kidney Donation</span><span data-lang="pt">Explore a Doação de Rim</span></a>
+  </div>
+</section>
+
+<div class="photo-strip">
+  <img src="images/selma_herman.jpg" class="strip-photo" alt="Selma e Herman">
+  <img src="images/camp_wilson.jpg" class="strip-photo" alt="Camp Wilson 917">
+  <img src="images/portrait.jpg" class="strip-photo" alt="Brian Wilson">
+  <img src="images/selma_old.jpg" class="strip-photo" alt="Brian e Mamãe Selma">
+  <img src="images/selma_brian.jpg" class="strip-photo" alt="Brian com família">
+  <img src="images/child.jpg" class="strip-photo" alt="Brian criança">
+  <img src="images/classroom.jpg" class="strip-photo" alt="Brian na sala de aula">
+  <img src="images/balloon.jpg" class="strip-photo" alt="Brian no festival de balões">
+  <img src="images/golf.jpg" class="strip-photo" alt="Brian no golfe">
+  <img src="images/family.jpg" class="strip-photo" alt="Brian com a família">
+  <img src="images/vintage.jpg" class="strip-photo" alt="Família Wilson">
+</div>
+
+<section class="selma-section" id="selma">
+  <div class="section-inner">
+    <p class="section-eyebrow"><span data-lang="en" class="visible">In Loving Memory</span><span data-lang="pt">Em Memória Amorosa</span></p>
+    <h2 class="section-title"><span data-lang="en" class="visible">Selma Wilson — The Superhero Behind the Story</span><span data-lang="pt">Selma Wilson — A Super-Heroína por Trás da História</span></h2>
+    <div class="selma-photos">
+      <div><img src="images/selma_herman.jpg" class="selma-photo" alt="Selma e Herman"><p class="caption">Selma &amp; Herman Wilson</p></div>
+      <div><img src="images/selma_old.jpg" class="selma-photo" alt="Brian e Mamãe Selma"><p class="caption"><span data-lang="en" class="visible">Brian &amp; Mama Selma</span><span data-lang="pt">Brian &amp; Mamãe Selma</span></p></div>
+      <div><img src="images/vintage.jpg" class="selma-photo" alt="Família Wilson"><p class="caption"><span data-lang="en" class="visible">Selma, Herman &amp; firstborn Darryl</span><span data-lang="pt">Selma, Herman &amp; primogênito Darryl</span></p></div>
+    </div>
+    <div class="section-body">
+      <p><span data-lang="en" class="visible">Selma Wilson was not just a mother. She was the backbone, the heartbeat, and the quiet force that made everything possible. A phenomenal mother of 9 children and 16 grandchildren, she served as Herman's personal nurse through 17 years of home dialysis in Jackson, Mississippi — providing guidance, nourishment, and unwavering love every single day.</span><span data-lang="pt">Selma Wilson não era apenas uma mãe. Ela era a espinha dorsal, o coração e a força silenciosa que tornava tudo possível. Uma mãe fenomenal de 9 filhos e 16 netos, ela serviu como enfermeira pessoal de Herman durante 17 anos de diálise em casa em Jackson, Mississippi.</span></p>
+      <p><span data-lang="en" class="visible">In 1997, when Brian gave his kidney to his father, Selma traveled tirelessly between Birmingham and Jackson — holding both her husband and son through surgery, recovery, and transition. She held the family together at its most fragile moment.</span><span data-lang="pt">Em 1997, quando Brian doou seu rim ao pai, Selma viajou incansavelmente entre Birmingham e Jackson — sustentando marido e filho durante a cirurgia, a recuperação e a transição.</span></p>
+      <p><span data-lang="en" class="visible">She was the family's and community's superhero, griot, mother, friend, sister, healer, and all-purpose doer of it all.</span><span data-lang="pt">Ela era a super-heroína da família e da comunidade, griô, mãe, amiga, irmã, curadora e realizadora de tudo.</span></p>
+    </div>
+    <div class="selma-quote"><span data-lang="en" class="visible">"Oh how I wish she were here to provide her magic in this stage. Thank you mama for all that you do, did, and the rich legacy you left. We love and miss you very much." — Brian Wilson</span><span data-lang="pt">"Oh, como eu gostaria que ela estivesse aqui para oferecer sua magia nesta fase. Obrigado, mamãe, pelo rico legado que deixou. Nós te amamos e sentimos muito a sua falta." — Brian Wilson</span></div>
+  </div>
+</section>
+
+<section class="timeline-section" id="about">
+  <div class="section-inner">
+    <p class="section-eyebrow"><span data-lang="en" class="visible">Brian's Story</span><span data-lang="pt">A História de Brian</span></p>
+    <h2 class="section-title" style="color:var(--navy);"><span data-lang="en" class="visible">From the very beginning — a life shaped by love and sacrifice</span><span data-lang="pt">Desde o início — uma vida moldada pelo amor e sacrifício</span></h2>
+    <div style="display:flex;gap:2rem;flex-wrap:wrap;align-items:flex-start;margin-bottom:2rem;">
+      <div style="flex:1;min-width:240px;"><img src="images/camp_wilson.jpg" style="width:100%;border-radius:10px;border:3px solid var(--gold);" alt="Camp Wilson 917"><p class="caption-dark">Camp Wilson 917</p></div>
+      <div style="flex:2;min-width:260px;">
+        <div class="timeline">
+          <div class="timeline-item"><div class="timeline-dot"></div><div><div class="timeline-year"><span data-lang="en" class="visible">Jackson, Mississippi — Early Years</span><span data-lang="pt">Jackson, Mississippi — Anos Iniciais</span></div><div class="timeline-text"><span data-lang="en" class="visible">Brian Wilson was born into a family of nine children. His parents Herman and Selma raised their children by example — with sacrifice, generosity, and love as their native language.</span><span data-lang="pt">Brian Wilson nasceu em uma família de nove filhos. Seus pais Herman e Selma criaram seus filhos pelo exemplo — com sacrifício, generosidade e amor como língua nativa.</span></div></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div><div class="timeline-year"><span data-lang="en" class="visible">Age 10 — A Child's Promise</span><span data-lang="pt">Aos 10 anos — A Promessa de uma Criança</span></div><div class="timeline-text"><span data-lang="en" class="visible">When Brian was just 10 years old, his father Herman was diagnosed with renal failure. Without hesitation, Brian told his parents: <strong>"If Daddy ever needs a kidney, he can have one of mine."</strong></span><span data-lang="pt">Quando Brian tinha apenas 10 anos, seu pai Herman foi diagnosticado com insuficiência renal. Sem hesitar, Brian disse: <strong>"Se papai precisar de um rim, ele pode ter um dos meus."</strong></span></div></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div><div class="timeline-year"><span data-lang="en" class="visible">1980–1997 — Seventeen Years of Dialysis</span><span data-lang="pt">1980–1997 — Dezessete Anos de Diálise</span></div><div class="timeline-text"><span data-lang="en" class="visible">For 17 years, Herman endured dialysis administered at home by Selma. She was his nurse, his caretaker, his daily sustainer. Brian never forgot his promise.</span><span data-lang="pt">Por 17 anos, Herman passou por diálise administrada em casa por Selma. Brian nunca esqueceu sua promessa.</span></div></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div><div class="timeline-year"><span data-lang="en" class="visible">September 15, 1997 — The Gift</span><span data-lang="pt">15 de setembro de 1997 — O Dom</span></div><div class="timeline-text"><span data-lang="en" class="visible">At 23 years old, Brian donated one of his kidneys to his father at UAB Hospital in Birmingham. The surgeon called it <strong>"one of the healthiest kidneys he had ever seen."</strong> Herman said: "That was just an outstanding sacrifice for a son to make for his father."</span><span data-lang="pt">Aos 23 anos, Brian doou um de seus rins ao pai no Hospital UAB em Birmingham. O cirurgião disse ser <strong>"um dos rins mais saudáveis que já havia visto."</strong></span></div></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div><div class="timeline-year"><span data-lang="en" class="visible">The Educator</span><span data-lang="pt">O Educador</span></div><div class="timeline-text"><span data-lang="en" class="visible">Brian built a career as a deeply committed educator — making profound connections with every student, approaching each day as both teacher and lifelong learner.</span><span data-lang="pt">Brian construiu uma carreira como educador profundamente comprometido — criando conexões profundas com cada aluno.</span></div></div></div>
+          <div class="timeline-item"><div class="timeline-dot"></div><div><div class="timeline-year"><span data-lang="en" class="visible">Today — Nearly 29 Years Later</span><span data-lang="pt">Hoje — Quase 29 Anos Depois</span></div><div class="timeline-text"><span data-lang="en" class="visible">Brian's remaining kidney is now failing. He is on the transplant waiting list at <strong>Piedmont Hospital, Atlanta</strong> and expects to be added at <strong>UAB Hospital, Birmingham</strong>.</span><span data-lang="pt">O rim restante de Brian está falhando. Ele está na lista de espera para transplante no <strong>Hospital Piedmont, Atlanta</strong> e espera ser adicionado no <strong>Hospital UAB, Birmingham</strong>.</span></div></div></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:1.25rem;flex-wrap:wrap;justify-content:center;margin-top:1.5rem;">
+      <div><img src="images/formal.jpg" style="width:200px;height:240px;object-fit:cover;border-radius:8px;border:3px solid var(--gold);" alt="Brian Wilson"><p class="caption-dark"><span data-lang="en" class="visible">Brian Wilson today</span><span data-lang="pt">Brian Wilson hoje</span></p></div>
+      <div><img src="images/portrait.jpg" style="width:200px;height:240px;object-fit:cover;border-radius:8px;border:3px solid var(--gold);" alt="Brian Wilson"><p class="caption-dark">Brian Wilson</p></div>
+      <div><img src="images/child.jpg" style="width:200px;height:240px;object-fit:cover;border-radius:8px;border:3px solid var(--gold);" alt="Brian jovem"><p class="caption-dark"><span data-lang="en" class="visible">Young Brian</span><span data-lang="pt">Brian jovem</span></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="newspaper-section">
+  <div class="section-inner" style="text-align:center;">
+    <p class="section-eyebrow"><span data-lang="en" class="visible">As Reported in The Clarion-Ledger</span><span data-lang="pt">Publicado no The Clarion-Ledger</span></p>
+    <h2 class="section-title" style="color:var(--navy);"><span data-lang="en" class="visible">The 1997 Newspaper Story</span><span data-lang="pt">A Reportagem de 1997</span></h2>
+    <p style="color:#555;font-size:0.97rem;line-height:1.7;max-width:580px;margin:0 auto 1.5rem;"><span data-lang="en" class="visible">Journalist Lisa Uzzle Gates wrote this feature about the Wilson family — proof of what Brian did, selfless and extraordinary.</span><span data-lang="pt">A jornalista Lisa Uzzle Gates escreveu esta reportagem sobre a família Wilson.</span></p>
+    <img src="images/newspaper.png" class="newspaper-img" alt="The Clarion-Ledger 1997">
+    <p class="newspaper-caption">"Son's Gift Renews Father's Life" — The Clarion-Ledger, 1997</p>
+  </div>
+</section>
+
+<section class="needs-section">
+  <div class="section-inner">
+    <p class="section-eyebrow"><span data-lang="en" class="visible">How Your Support Helps</span><span data-lang="pt">Como Seu Apoio Ajuda</span></p>
+    <h2 class="section-title"><span data-lang="en" class="visible">What Brian needs during his transplant journey</span><span data-lang="pt">O que Brian precisa durante sua jornada de transplante</span></h2>
+    <div class="needs-grid">
+      <div class="need-card"><div class="need-icon">🚗</div><div class="need-title"><span data-lang="en" class="visible">Transportation</span><span data-lang="pt">Transporte</span></div><div class="need-desc"><span data-lang="en" class="visible">Travel to Piedmont Hospital Atlanta and UAB Hospital Birmingham for all appointments and surgery.</span><span data-lang="pt">Viagens ao Hospital Piedmont em Atlanta e ao Hospital UAB em Birmingham.</span></div></div>
+      <div class="need-card"><div class="need-icon">💊</div><div class="need-title"><span data-lang="en" class="visible">Medications</span><span data-lang="pt">Medicamentos</span></div><div class="need-desc"><span data-lang="en" class="visible">Post-transplant anti-rejection medications not fully covered by insurance — required for life.</span><span data-lang="pt">Medicamentos antirrejeição pós-transplante não totalmente cobertos pelo seguro.</span></div></div>
+      <div class="need-card"><div class="need-icon">🏠</div><div class="need-title"><span data-lang="en" class="visible">Living Expenses</span><span data-lang="pt">Despesas de Vida</span></div><div class="need-desc"><span data-lang="en" class="visible">At least 3 months unable to work during recovery.</span><span data-lang="pt">Pelo menos 3 meses sem poder trabalhar durante a recuperação.</span></div></div>
+      <div class="need-card"><div class="need-icon">🏥</div><div class="need-title"><span data-lang="en" class="visible">Medical Costs</span><span data-lang="pt">Custos Médicos</span></div><div class="need-desc"><span data-lang="en" class="visible">Out-of-pocket labs, specialist visits, and pre-transplant evaluations not fully covered.</span><span data-lang="pt">Exames e consultas não totalmente cobertos pelo seguro.</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="donate-section" id="donate">
+  <div class="section-inner">
+    <h2 class="donate-title"><span data-lang="en" class="visible">Every gift moves Brian closer to a second chance at life</span><span data-lang="pt">Cada doação aproxima Brian de uma segunda chance de vida</span></h2>
+    <p class="donate-sub"><span data-lang="en" class="visible">Choose the giving method that works best for you. Every amount makes a real difference.</span><span data-lang="pt">Escolha o método de doação que funciona melhor para você.</span></p>
+    <a href="https://www.gofundme.com/f/support-brians-journey-to-a-kidney-transplant" target="_blank" class="btn-gofundme">💛 <span data-lang="en" class="visible">Donate on GoFundMe</span><span data-lang="pt">Doe no GoFundMe</span></a>
+    <div class="donate-cards">
+      <div class="donate-card"><div class="donate-card-icon">⚡</div><div class="donate-card-label"><span data-lang="en" class="visible">Zelle — No Fees</span><span data-lang="pt">Zelle — Sem Taxas</span></div><div class="donate-card-value">billionsbrian@gmail.com</div></div>
+      <div class="donate-card"><div class="donate-card-icon">🇧🇷</div><div class="donate-card-label">PIX — Brasil</div><div class="donate-card-value">845-848-585-00</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="donor-section" id="donor">
+  <div class="section-inner" style="text-align:center;">
+    <p class="section-eyebrow" style="color:var(--gold);"><span data-lang="en" class="visible">Could You Be a Match?</span><span data-lang="pt">Você Poderia Ser Compatível?</span></p>
+    <h2 class="section-title"><span data-lang="en" class="visible">One person's decision to explore donation could save Brian's life</span><span data-lang="pt">A decisão de uma pessoa de explorar a doação pode salvar a vida de Brian</span></h2>
+    <div class="section-body" style="max-width:560px;margin:0 auto 2rem;color:rgba(255,255,255,0.75);"><p><span data-lang="en" class="visible">The first step is simply finding out if you might be eligible — no commitment required.</span><span data-lang="pt">O primeiro passo é simplesmente descobrir se você pode ser elegível — sem compromisso.</span></p></div>
+    <a href="https://piedmont.donorscreen.org" target="_blank" class="btn-donor">🫀 <span data-lang="en" class="visible">Begin Donor Screening at Piedmont</span><span data-lang="pt">Iniciar Triagem de Doador no Piedmont</span></a>
+  </div>
+</section>
+
+<section class="share-section">
+  <div class="section-inner">
+    <p class="section-eyebrow"><span data-lang="en" class="visible">Spread the Word</span><span data-lang="pt">Espalhe a Palavra</span></p>
+    <h2 class="section-title"><span data-lang="en" class="visible">Share Brian's Story</span><span data-lang="pt">Compartilhe a História de Brian</span></h2>
+    <div class="section-body" style="max-width:540px;margin:0 auto 2rem;"><p><span data-lang="en" class="visible">Even if you cannot give financially or as a donor, sharing Brian's story could reach the one person who changes everything.</span><span data-lang="pt">Mesmo que você não possa contribuir, compartilhar a história de Brian pode alcançar a pessoa que vai mudar tudo.</span></p></div>
+    <div class="share-buttons">
+      <a href="https://www.facebook.com/sharer/sharer.php?u=https://beanforbrian.com" target="_blank" class="btn-share btn-fb">📘 Facebook</a>
+      <a href="https://api.whatsapp.com/send?text=Brian+Wilson+doou+seu+rim+para+salvar+o+pai+em+1997.+Agora+Brian+precisa+de+um+transplante.+Por+favor+ajude%3A+https%3A%2F%2Fbeanforbrian.com" target="_blank" class="btn-share btn-wa">💬 WhatsApp</a>
+      <a href="mailto:?subject=A story worth sharing&body=Please read Brian Wilson's story: https://beanforbrian.com" class="btn-share btn-email">✉️ Email</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-brand">💛 Bean for Brian</div>
+  <p class="footer-text">
+    <span data-lang="en" class="visible">Transplant Waiting List: Piedmont Hospital, Atlanta &amp; UAB Hospital, Birmingham<br>Living Donor Screening: <a href="https://piedmont.donorscreen.org" target="_blank">piedmont.donorscreen.org</a><br>GoFundMe: <a href="https://www.gofundme.com/f/support-brians-journey-to-a-kidney-transplant" target="_blank">Support Brian's Journey</a></span>
+    <span data-lang="pt">Lista de Espera: Hospital Piedmont, Atlanta &amp; Hospital UAB, Birmingham<br>Triagem de Doador: <a href="https://piedmont.donorscreen.org" target="_blank">piedmont.donorscreen.org</a><br>GoFundMe: <a href="https://www.gofundme.com/f/support-brians-journey-to-a-kidney-transplant" target="_blank">Apoie a Jornada de Brian</a></span>
+  </p>
+</footer>
+</div>
+
+<script>
+var currentLang='en';
+function setLang(lang,e){
+  currentLang=lang;
+  document.querySelectorAll('[data-lang]').forEach(function(el){
+    el.classList.toggle('visible',el.getAttribute('data-lang')===lang);
+  });
+  document.querySelectorAll('.lang-btn').forEach(function(btn){btn.classList.remove('active');});
+  if(e&&e.target)e.target.classList.add('active');
+}
+function revealStory(){
+  document.getElementById('landing').style.display='none';
+  document.getElementById('story').style.display='block';
+  window.scrollTo(0,0);
+}
+document.getElementById('contactForm').addEventListener('submit',async function(e){
+  e.preventDefault();
+  var btn=document.getElementById('submitBtn');
+  btn.disabled=true;
+  btn.textContent='Sending...';
+  try{
+    var r=await fetch('https://formspree.io/f/meebqgnb',{method:'POST',body:new FormData(this),headers:{'Accept':'application/json'}});
+    if(r.ok){
+      document.getElementById('formSection').style.display='none';
+      document.getElementById('successMsg').style.display='block';
+      setTimeout(revealStory,2500);
+    }else{throw new Error();}
+  }catch(err){
+    btn.disabled=false;
+    btn.textContent='💛 Read Brian\'s Story & Learn How to Help';
+    document.getElementById('errorMsg').style.display='block';
+  }
+});
+</script>
+</body>
+</html>
